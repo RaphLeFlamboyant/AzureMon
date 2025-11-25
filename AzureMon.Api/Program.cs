@@ -5,12 +5,10 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Services
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Repository in-memory
-builder.Services.AddSingleton<IPokemonRepository, InMemoryPokemonRepository>();
+builder.Services.AddScoped<IPokemonRepository, EfPokemonRepository>();
 
 var connectionString = builder.Configuration.GetConnectionString("PokemonDb")
                        ?? throw new InvalidOperationException(
@@ -32,9 +30,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// Endpoint minimal pour vérifier que l’API tourne
+// Endpoints
 app.MapGet("/", () => Results.Ok("AzureMon API is running"));
-
 app.MapPokemonEndpoints();
 app.MapStatsEndpoints();
 
