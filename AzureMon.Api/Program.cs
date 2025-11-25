@@ -28,7 +28,7 @@ app.UseSwaggerUI();
 app.UseHttpsRedirection();
 
 // Endpoints
-app.MapGet("/", () => Results.Ok("AzureMon API is running"));
+app.MapGet("/", () => Results.Ok("AzureMon API is running - v1"));
 app.MapPokemonEndpoints();
 app.MapStatsEndpoints();
 
