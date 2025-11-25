@@ -1,5 +1,7 @@
+using AzureMon.Api.Data;
 using AzureMon.Api.Endpoints;
 using AzureMon.Api.Services.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +11,15 @@ builder.Services.AddSwaggerGen();
 
 // Repository in-memory
 builder.Services.AddSingleton<IPokemonRepository, InMemoryPokemonRepository>();
+
+var connectionString = builder.Configuration.GetConnectionString("PokemonDb")
+                       ?? throw new InvalidOperationException(
+                           "Connection string 'PokemonDb' not found. " +
+                           "Configure it via user-secrets en local ou Connection Strings dans Azure."
+                       );
+
+builder.Services.AddDbContext<PokemonDbContext>(options =>
+    options.UseSqlServer(connectionString));
 
 var app = builder.Build();
 
